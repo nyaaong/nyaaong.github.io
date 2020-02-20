@@ -1,0 +1,43 @@
+---
+layout: post
+title:  "RRDtool"
+date:   2020-02-20 23:51:19 +0900
+categories: rrd
+---
+## RRDtool(Round-Robin Database tool)
+
+#### 개요
+cpu 부하량, 온도, 네트워크 대역폭 등과 같이 일정 시간 간격으로 나열가능한 데이터들(시계열 데이터)을 다루는 것을 목표로 한 데이터 베이스다. 순환 버퍼 기반의 데이터베이스이므로 시간이 흘러도 일정한 용량을 유지한다.
+
+전반적인 내용이 [솔라나라(https://www.solanara.net/solanara/rrdtool)](https://www.solanara.net/solanara/rrdtool)에 잘 정리 되어있으니 참조하자.
+
+rrd 파일을 생성하고 데이터를 입력하고 출력하는 순서로 정리하며 필요한 개념들을 몇가지 정리해보자.
+
+#### 1. rrd 파일 생성하기
+관계형 데이터베이스에서 데이터를 저장하기 위해 테이블을 생성하듯이 우선 rrd 파일을 생성해야 한다.
+원하는 값을 출력하기 위해선 데이터 구조를 잘 정의해야 하는데, 그러기 위해선 아래의 몇가지 사항을 이해하고 넘어가야한다.(실제로 회사에서 일할 때 데이터 구조를 잘못 정의하는 바람에 출력값이 안드로메다로 향하는 모습을 봤었다.)
+
+```
+ rrdtool create filename [--start|-b start time]
+                [--step|-s step]
+                [--template|-t template-file]
+                [--source|-r source-file]
+                [--no-overwrite|-O]
+                [--daemon|-d address]
+                [DS:ds-name:DST:dst arguments]
+                [RRA:CF:cf arguments]
+```
+
+start time(--start 또는 -b)
+
+step(--step 또는 -s)
+
+DS
+ds-name
+DST
+dst arguments
+
+RRA
+CF
+cf arguments
+
