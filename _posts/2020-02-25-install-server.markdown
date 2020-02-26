@@ -94,7 +94,7 @@ categories: centos
     ```
     이제 컴파일! 하면 좋겠지만 ```configure``` 로 확인해보면 에러가 마구 뜬다. 우선 필요한 라이브러리부터 설치하자. git에 필요한 의존성을 찾지 못해서 ```configure```로 하나하나 설치해가며 확인했다.
     ```
-    # dnf install gcc-c++ make zlib-devel
+    # dnf install gcc-c++ make zlib-devel openssl-devel libcurl-devel
     ```
     이제 컴파일을 해야하는데 configure단계에서 고민을 조금 했다. 설치경로를 default로  사용할지, 내게 익숙한 방식으로 사용할지. prefix를 루트로 잡고 eprefix를 /usr/local에 넣으면 종종 접근이 필요한 config파일이나 pid파일의 접근 경로가 짧아지지만 그냥 default로 한번은 써보고 싶었다.
     ```
