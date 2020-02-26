@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "웹서버 만들기"
-date:   2020-02-20 23:51:19 +0900
+date:   2020-02-25 23:51:19 +0900
 categories: centos
 ---
 ## 개인 웹서버 만들기
@@ -78,7 +78,7 @@ categories: centos
 3. 유틸 설치하기  
     minimal install이어서 ```ifconfig```이나 ```netstat``` 같은 몇몇 명령어를 쓸 수 없다. 네트워크 장애가 의심될 때 원인 파악에 유용하게 사용할 수 있는 유틸을 몇개 설치한다.
     ```
-    # dnf install net-tools traceroute telnet
+    # dnf install net-tools traceroute telnet tcpdump
     ```
 
 
@@ -92,4 +92,47 @@ categories: centos
     # tar -zxvf git.2.25.1.tar.gz
     # cd git-2.25.1
     ```
-    
+    이제 컴파일! 하면 좋겠지만 ```configure``` 로 확인해보면 에러가 마구 뜬다. 우선 필요한 라이브러리부터 설치하자. git에 필요한 의존성을 찾지 못해서 ```configure```로 하나하나 설치해가며 확인했다.
+    ```
+    # dnf install gcc-c++ make zlib-devel
+    ```
+    이제 컴파일을 해야하는데 configure단계에서 고민을 조금 했다. 설치경로를 default로  사용할지, 내게 익숙한 방식으로 사용할지. prefix를 루트로 잡고 eprefix를 /usr/local에 넣으면 종종 접근이 필요한 config파일이나 pid파일의 접근 경로가 짧아지지만 그냥 default로 한번은 써보고 싶었다.
+    ```
+    # ./configure
+    # make && make install
+    ```
+    설치가 완료되었다면 제대로 설치되었는지 확인해본다.
+    ```
+    git --version
+    ```
+
+5. java 설치하기  
+    julu로 설치한다. LTS 버전인 11버전을 다운받는다.
+    ```
+    # cd /home/build
+    # curl -o zulu11.37.17-ca-jdk11.0.6-linux_x64.tar.gz https://cdn.azul.com/zulu/bin/zulu11.37.17-ca-jdk11.0.6-linux_x64.tar.gz
+    # tar -zxvf zulu11.37.17-ca-jdk11.0.6-linux_x64.tar.gz
+    # mv zulu11.37.17-ca-jdk11.0.6-linux_x64 /usr/local/zulu11.37.17-ca-jdk11.0.6
+    ```
+    환경 변수를 잡아주고 확인해본다.
+    ```
+    # cd /etc/profile.d/
+    # vi path.sh
+    ```
+    >JAVA_HOME=/usr/local/zulu11.37.17-ca-jdk11.0.6
+    >
+    >PATH=$PATH:$JAVA_HOME/bin
+    >
+    >export PATH
+    ```
+    # chmod +x path.sh
+    # source /etc/profile
+    # java -version
+    ```
+
+여기까지 1차 작업 완료. bind와 dhcp, rrd 등 필요한 유틸은 따로 포스팅할 예정.
+다음엔 워드프레스로 설치형 블로그를 만들지 호스팅형 블로그를 운영할지 고민중. 마크다운이 편리하긴 하지만 원하는 포맷으로 포스팅하기가 만만치 않은것 같다.
+
+끝
+
+
